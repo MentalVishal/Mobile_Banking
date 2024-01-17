@@ -16,7 +16,7 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react";
 
 export const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -55,7 +55,12 @@ export const Navbar = () => {
       align="center"
       cursor={"pointer"}
     >
-      <Text fontWeight="bold" fontSize="2xl" color="yellow">
+      <Text
+        fontWeight="bold"
+        fontSize="2xl"
+        color="yellow"
+        onClick={() => navigate("/")}
+      >
         Mobile Banking
       </Text>
       {isLargerThan768 ? (
@@ -98,7 +103,7 @@ export const Navbar = () => {
           </Text>
           <Wrap pl={3}>
             <WrapItem>
-              <Avatar name={name} src={Image} />
+              <Avatar name={name} src={image} />
             </WrapItem>
           </Wrap>
         </Flex>

@@ -9,7 +9,6 @@ import {
   FormLabel,
   Input,
   Button,
-  Avatar,
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
