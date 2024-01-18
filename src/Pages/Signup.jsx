@@ -17,6 +17,7 @@ import styled from "@emotion/styled";
 export const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [openingBalance, setOpeningBalance] = useState("");
   const [pin, setPin] = useState("");
@@ -32,7 +33,7 @@ export const Signup = () => {
     <Div>
       <Flex align="center" justify="center" minHeight="92.9vh">
         <Box
-          width="400px"
+          width="600px"
           p={8}
           borderWidth={1}
           borderRadius={8}
@@ -57,6 +58,15 @@ export const Signup = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Mobile Number</FormLabel>
+              <Input
+                type="number"
+                placeholder="Enter your Number"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
               />
             </FormControl>
             <FormControl mb={4}>

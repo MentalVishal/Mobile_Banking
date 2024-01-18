@@ -19,6 +19,7 @@ export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState("");
   const [transactionType, setTransactionType] = useState("cash");
   const [pin, setPin] = useState("");
+  const [description, setDescription] = useState("");
   const [pinError, setPinError] = useState("");
 
   const handleDeposit = () => {
@@ -99,6 +100,14 @@ export const Deposit = () => {
               <option value="upi">UPI</option>
             </Select>
             <Input
+              placeholder="Description"
+              size="lg"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              bg="gray.100"
+              focusBorderColor="teal.500"
+            />
+            <Input
               placeholder="Enter your 4-digit PIN"
               size="lg"
               type="password"
@@ -128,11 +137,11 @@ export const Deposit = () => {
             </Button>
           </VStack>
         </Box>
+        <Text m={6} fontSize="sm" textAlign="center" color="gray.500">
+          © 2024 Your Bank. All rights reserved.
+        </Text>
       </Container>
-      <br />
-      <br />
-      <br />
-      <br />
+
       <Footer />
     </div>
   );

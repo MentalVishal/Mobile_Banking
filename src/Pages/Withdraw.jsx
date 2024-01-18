@@ -18,6 +18,7 @@ import { Footer } from "../Component/Footer";
 
 export const Withdraw = () => {
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [otp, setOtp] = useState("");
 
   const balance = 99990;
@@ -70,6 +71,14 @@ export const Withdraw = () => {
               focusBorderColor="teal.500"
             />
             <Input
+              placeholder="Description"
+              size="md"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              bg="gray.100"
+              focusBorderColor="teal.500"
+            />
+            <Input
               placeholder="Enter Your Pin"
               size="md"
               type="password"
@@ -89,11 +98,12 @@ export const Withdraw = () => {
             </Button>
           </VStack>
         </Box>
+        <Text m={6} fontSize="sm" textAlign="center" color="gray.500">
+          © 2024 Your Bank. All rights reserved.
+        </Text>
       </Container>
       <br />
-      <br />
-      <br />
-      <br />
+
       <Footer />
     </div>
   );
