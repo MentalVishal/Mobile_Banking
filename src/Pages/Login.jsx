@@ -13,15 +13,20 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
+import { UserLogin } from "../Redux/UserReducer/action";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your login logic here
+    await dispatch(UserLogin({ email: email, password: password })).then(() => {
+      navigate("/account");
+    });
   };
 
   return (

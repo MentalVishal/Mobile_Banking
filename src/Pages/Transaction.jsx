@@ -14,32 +14,21 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Sidebar } from "../Component/Sidebar";
+import { useSelector } from "react-redux";
 
 export const Transaction = () => {
   const tableBgColor = useColorModeValue("white", "gray.800");
   const thBgColor = useColorModeValue("gray.100", "gray.700");
 
-  const transactions = [
-    {
-      id: 1,
-      date: "2024-01-15",
-      description: "Purchase at XYZ Store",
-      amount: -50.0,
-    },
-    {
-      id: 2,
-      date: "2024-01-14",
-      description: "Salary Deposit",
-      amount: 2000.0,
-    },
-    {
-      id: 3,
-      date: "2024-01-13",
-      description: "ATM Withdrawal",
-      amount: -100.0,
-    },
-    // Add more transactions as needed
-  ];
+  const Alltransactions = useSelector(
+    (store) => store.userReducer.transactions
+  );
+  const transactions = [];
+  if (Alltransactions.length > 0) {
+    for (let i = Alltransactions.length - 1; i >= 0; i--) {
+      transactions.push(Alltransactions[i]);
+    }
+  }
 
   return (
     <Flex direction="column" minHeight="92.9vh">
@@ -75,24 +64,32 @@ export const Transaction = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {transactions.map((transaction) => (
-                  <Tr key={transaction.id}>
-                    <Td>{transaction.date}</Td>
+                {transactions?.map((transaction) => (
+                  <Tr key={transaction?.id}>
+                    <Td>{transaction?.date}</Td>
                     <Td>{transaction.description}</Td>
                     <Td
-                      color={transaction.amount > 0 ? "green.500" : "red.500"}
+                      color={
+                        transaction.transType === "Credit"
+                          ? "green.500"
+                          : "red.500"
+                      }
                     >
-                      {transaction.amount > 0
-                        ? `+$${transaction.amount}`
-                        : `-$${Math.abs(transaction.amount)}`}
+                      {transaction.transType === "Credit"
+                        ? `+₹${transaction.amount}`
+                        : `-₹${Math.abs(transaction.amount)}`}
                     </Td>
                     <Td>
                       <Badge
                         display={{ base: "none", md: "table-cell" }}
-                        colorScheme={transaction.amount > 0 ? "green" : "red"}
+                        colorScheme={
+                          transaction.transType === "Credit" ? "green" : "red"
+                        }
                         variant="solid"
                       >
-                        {transaction.amount > 0 ? "Credit" : "Debit"}
+                        {transaction.transType === "Credit"
+                          ? "Credit"
+                          : "Debit"}
                       </Badge>
                     </Td>
                   </Tr>

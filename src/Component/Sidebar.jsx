@@ -4,9 +4,16 @@ import { FaUser, FaDollarSign, FaChartPie, FaHistory } from "react-icons/fa";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Logout } from "../Redux/UserReducer/action";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handelLogout = () => {
+    dispatch(Logout());
+  };
 
   return (
     <Box
@@ -53,7 +60,12 @@ export const Sidebar = () => {
           <Icon as={FaHistory} />
           <Text>History</Text>
         </HStack>
-        <HStack spacing={2} cursor={"pointer"} _hover={{ color: "#CEC12F" }}>
+        <HStack
+          spacing={2}
+          cursor={"pointer"}
+          _hover={{ color: "#CEC12F" }}
+          onClick={handelLogout}
+        >
           <Icon as={RiLogoutBoxFill} />
           <Text>Logout</Text>
         </HStack>

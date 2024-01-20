@@ -9,18 +9,54 @@ import { Login } from "../Pages/Login";
 import { Signup } from "../Pages/Signup";
 import { Profile } from "../Pages/Profile";
 import { Transaction } from "../Pages/Transaction";
+import { PrivateRoute } from "./PrivateRoute";
 
 export const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/account" element={<Account />} />
-      <Route path="/deposit" element={<Deposit />} />
-      <Route path="/withdraw" element={<Withdraw />} />
+      <Route
+        path="/account"
+        element={
+          <PrivateRoute>
+            <Account />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/deposit"
+        element={
+          <PrivateRoute>
+            <Deposit />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/withdraw"
+        element={
+          <PrivateRoute>
+            <Withdraw />
+          </PrivateRoute>
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/transaction" element={<Transaction />} />
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/transaction"
+        element={
+          <PrivateRoute>
+            <Transaction />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 };

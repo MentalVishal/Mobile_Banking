@@ -23,35 +23,20 @@ import { FaHistory } from "react-icons/fa";
 import { Sidebar } from "../Component/Sidebar";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const Account = () => {
-  const balance = 99990;
+  const balance = useSelector((store) => store.userReducer.balance);
+
   const navigate = useNavigate();
 
   const tableBgColor = useColorModeValue("white", "gray.800");
   const thBgColor = useColorModeValue("gray.100", "gray.700");
 
-  const transactions = [
-    {
-      id: 1,
-      date: "2024-01-15",
-      description: "Purchase at XYZ Store",
-      amount: -50.0,
-    },
-    {
-      id: 2,
-      date: "2024-01-14",
-      description: "Salary Deposit",
-      amount: 2000.0,
-    },
-    {
-      id: 3,
-      date: "2024-01-13",
-      description: "ATM Withdrawal",
-      amount: -100.0,
-    },
-    // Add more transactions as needed
-  ];
+  const Alltransactions = useSelector(
+    (store) => store.userReducer.transactions
+  );
+  const transactions = Alltransactions.slice(-5);
 
   return (
     <div>
@@ -135,34 +120,36 @@ export const Account = () => {
                           </Tr>
                         </Thead>
                         <Tbody>
-                          {transactions.map((transaction) => (
-                            <Tr key={transaction.id}>
-                              <Td textAlign="center">{transaction.date}</Td>
+                          {transactions?.map((transaction) => (
+                            <Tr key={transaction?._id}>
+                              <Td textAlign="center">{transaction?.date}</Td>
                               <Td textAlign="center">
-                                {transaction.description}
+                                {transaction?.description}
                               </Td>
                               <Td
                                 textAlign="center"
                                 color={
-                                  transaction.amount > 0
+                                  transaction.transType === "Credit"
                                     ? "green.500"
                                     : "red.500"
                                 }
                               >
-                                {transaction.amount > 0
-                                  ? `+$${transaction.amount}`
-                                  : `-$${Math.abs(transaction.amount)}`}
+                                {transaction.transType === "Credit"
+                                  ? `+₹${transaction?.amount}`
+                                  : `-₹${Math.abs(transaction?.amount)}`}
                               </Td>
                               <Td textAlign="center">
                                 <Flex align="center" justify="center">
                                   <Badge
                                     colorScheme={
-                                      transaction.amount > 0 ? "green" : "red"
+                                      transaction.transType === "Credit"
+                                        ? "green"
+                                        : "red"
                                     }
                                     display={{ base: "none", md: "table-cell" }}
                                     variant="solid"
                                   >
-                                    {transaction.amount > 0
+                                    {transaction.transType === "Credit"
                                       ? "Credit"
                                       : "Debit"}
                                   </Badge>

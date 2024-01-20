@@ -14,26 +14,46 @@ import { FaArrowLeft, FaMoneyBill } from "react-icons/fa";
 import { useState } from "react";
 import { Footer } from "../Component/Footer";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Deposite_Money } from "../Redux/UserReducer/action";
 
 export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState("");
   const [transactionType, setTransactionType] = useState("cash");
   const [pin, setPin] = useState("");
   const [description, setDescription] = useState("");
-  const [pinError, setPinError] = useState("");
 
-  const handleDeposit = () => {
+  const dispatch = useDispatch();
+
+  const userPin = useSelector((store) => store.userReducer.pin);
+  const token = useSelector((store) => store.userReducer.token);
+
+  const handleDeposit = async () => {
     // Validate the PIN before processing the deposit
-    if (pin.length !== 4) {
-      setPinError("PIN must be 4 digits");
+    if (depositAmount === "" || depositAmount <= 0) {
+      toast.error("Enter the Amount");
       return;
+    } else if (pin.length !== 4) {
+      toast.warn("PIN must be 4 digits");
+      setPin("");
+      return;
+    } else if (pin !== userPin) {
+      toast.error("Incorrect PIN");
+      setPin("");
+      return;
+    } else {
+      const data = {
+        amount: depositAmount,
+        description: `${description} / ${transactionType}`,
+      };
+      await dispatch(Deposite_Money({ data, token }));
+      setDepositAmount("");
+      setPin("");
+      setDescription("");
     }
 
     // Reset PIN error and proceed with deposit logic
-    setPinError("");
-    console.log("Deposit amount:", depositAmount);
-    console.log("Transaction type:", transactionType);
-    console.log("PIN:", pin);
   };
 
   const navigate = useNavigate();
@@ -83,9 +103,11 @@ export const Deposit = () => {
               placeholder="Enter deposit amount"
               size="lg"
               value={depositAmount}
+              type="number"
               onChange={(e) => setDepositAmount(e.target.value)}
               bg="gray.100"
               focusBorderColor="teal.500"
+              required={true}
             />
             <Select
               placeholder="Select transaction type"
@@ -114,18 +136,12 @@ export const Deposit = () => {
               value={pin}
               onChange={(e) => {
                 setPin(e.target.value.slice(0, 4)); // Limit to 4 characters
-                setPinError("");
               }}
               maxLength={4} // Maximum length
               bg="gray.100"
               focusBorderColor="teal.500"
-              isInvalid={pinError !== ""}
             />
-            {pinError && (
-              <Text color="red.500" fontSize="sm" textAlign="left">
-                {pinError}
-              </Text>
-            )}
+
             <Button
               colorScheme="teal"
               size="lg"

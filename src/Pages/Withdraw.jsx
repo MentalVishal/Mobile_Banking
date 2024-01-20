@@ -15,21 +15,45 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../Component/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { Withdraw_Money } from "../Redux/UserReducer/action";
+import { toast } from "react-toastify";
 
 export const Withdraw = () => {
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
   const [description, setDescription] = useState("");
   const [otp, setOtp] = useState("");
 
-  const balance = 99990;
-
-  const handleWithdrawal = () => {
-    // Add logic to handle the withdrawal
-    console.log("Withdrawal amount:", withdrawalAmount);
-    console.log("OTP:", otp);
-  };
+  const balance = useSelector((store) => store.userReducer.balance);
+  const pin = useSelector((store) => store.userReducer.pin);
+  const token = useSelector((store) => store.userReducer.token);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleWithdrawal = async () => {
+    if (withdrawalAmount === "" || withdrawalAmount <= 0) {
+      toast.error("Enter the Amount");
+      return;
+    } else if (otp.length !== 4) {
+      toast.warn("PIN must be 4 digits");
+      setOtp("");
+      return;
+    } else if (otp !== pin) {
+      toast.error("Incorrect PIN");
+      setOtp("");
+      return;
+    } else {
+      const data = {
+        amount: withdrawalAmount,
+        description: description === "" ? "Cash" : description,
+      };
+      await dispatch(Withdraw_Money({ data, token }));
+      setWithdrawalAmount("");
+      setDescription("");
+      setOtp("");
+    }
+  };
 
   return (
     <div>

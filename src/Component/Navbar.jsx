@@ -17,15 +17,18 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../Redux/UserReducer/action";
 
 export const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const isLogin = false;
-  const name = "";
+  const isLogin = useSelector((store) => store.userReducer.isAuth);
+  const name = useSelector((store) => store.userReducer.name);
   const image = "";
 
   const handelAccount = () => {
@@ -43,6 +46,14 @@ export const Navbar = () => {
   const handelLogin = () => {
     onClose();
     navigate("/login");
+  };
+
+  const handelNavigate = async () => {
+    if (!isLogin) {
+      navigate("/login");
+    } else {
+      await dispatch(Logout());
+    }
   };
 
   return (
@@ -97,7 +108,7 @@ export const Navbar = () => {
             fontWeight="bold"
             fontSize="xl"
             color="white"
-            onClick={() => navigate("/login")}
+            onClick={handelNavigate}
           >
             {isLogin ? "Logout" : "Login"}
           </Text>
@@ -106,6 +117,9 @@ export const Navbar = () => {
               <Avatar name={name} src={image} />
             </WrapItem>
           </Wrap>
+          <Text color={"white"} pl={1} fontSize={"md"}>
+            {name}
+          </Text>
         </Flex>
       ) : (
         <>

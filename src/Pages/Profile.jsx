@@ -20,15 +20,33 @@ import {
 import { Sidebar } from "../Component/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Pin_update } from "../Redux/UserReducer/action";
+import { toast } from "react-toastify";
 
 export const Profile = () => {
   const [isEditingPin, setIsEditingPin] = useState(false);
   const [newPin, setNewPin] = useState("");
+  const dispatch = useDispatch();
 
-  const handlePinUpdate = () => {
-    // Add logic to update the PIN here
-    console.log("Updating PIN:", newPin);
-    setIsEditingPin(false);
+  const name = useSelector((store) => store.userReducer.name);
+  const email = useSelector((store) => store.userReducer.email);
+  const mobile = useSelector((store) => store.userReducer.mobile);
+  const balance = useSelector((store) => store.userReducer.balance);
+  const pin = useSelector((store) => store.userReducer.pin);
+
+  const token = useSelector((store) => store.userReducer.token);
+
+  const handlePinUpdate = async () => {
+    if (newPin.length !== 4) {
+      toast.warn("Pin length should be 4");
+      setNewPin("");
+    } else {
+      await dispatch(Pin_update({ updatePin: newPin, token }));
+      // Add logic to update the PIN here
+      console.log("Updating PIN:", newPin);
+      setIsEditingPin(false);
+    }
   };
 
   const navigate = useNavigate();
@@ -66,13 +84,13 @@ export const Profile = () => {
               <Flex align="center" justify="center" direction="column">
                 <Avatar
                   size="xl"
-                  name="John Doe"
+                  name={name}
                   src="/profile-picture.jpg"
                   mb={4}
                 />
 
                 <Heading fontSize="2xl" mb={2}>
-                  John Doe
+                  {name}
                 </Heading>
 
                 <Badge colorScheme="teal" fontSize="sm" mb={4}>
@@ -83,16 +101,19 @@ export const Profile = () => {
 
                 <VStack spacing={2} align="start">
                   <Text>
-                    <strong>Email:</strong> john.doe@example.com
+                    <strong>Balance:</strong> ₹ {balance}
                   </Text>
                   <Text>
-                    <strong>Phone:</strong> (555) 555-5555
+                    <strong>Email:</strong> {email}
                   </Text>
                   <Text>
-                    <strong>Location:</strong> City, Country
+                    <strong>Phone:</strong> +91 {mobile}
                   </Text>
                   <Text>
-                    <strong>Balance:</strong> $10,000
+                    <strong>Pin:</strong> {pin}
+                  </Text>
+                  <Text>
+                    <strong>Location:</strong> India
                   </Text>
                 </VStack>
 
@@ -100,10 +121,16 @@ export const Profile = () => {
                   <FormControl mt={4}>
                     <FormLabel>New PIN</FormLabel>
                     <Input
-                      type="password"
-                      placeholder="Enter new PIN"
+                      placeholder="Enter your 4-digit New PIN"
+                      size="lg"
+                      type="number"
                       value={newPin}
-                      onChange={(e) => setNewPin(e.target.value)}
+                      onChange={(e) => {
+                        setNewPin(e.target.value.slice(0, 4)); // Limit to 4 characters
+                      }}
+                      maxLength={4} // Maximum length
+                      bg="gray.100"
+                      focusBorderColor="teal.500"
                     />
                     <Button mt={2} colorScheme="teal" onClick={handlePinUpdate}>
                       Update PIN

@@ -13,6 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
+import { UserSignup } from "../Redux/UserReducer/action";
+import { toast } from "react-toastify";
 
 export const Signup = () => {
   const [name, setName] = useState("");
@@ -23,11 +26,39 @@ export const Signup = () => {
   const [pin, setPin] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(pin);
-    // Add your signup logic here
+    const data = {
+      name: name,
+      email: email,
+      mobile: mobile,
+      password: password,
+      balance: openingBalance,
+      pin: pin,
+    };
+    if (name === "") {
+      toast.error("Enter your Name");
+    } else if (email === "") {
+      toast.error("Enter your Email");
+    } else if (mobile === "") {
+      toast.error("Enter your Mobile no.");
+    } else if (password === "") {
+      toast.error("Enter your Password");
+    } else if (openingBalance === "") {
+      toast.error("Enter your Opening Balance");
+    } else if (pin === "" || pin.length !== 4) {
+      toast.error("Create Your Pin");
+    } else {
+      dispatch(UserSignup(data)).then((res) => {
+        navigate("/login");
+      });
+    }
+
+    dispatch(UserSignup(data)).then((res) => {
+      navigate("/login");
+    });
   };
   return (
     <Div>

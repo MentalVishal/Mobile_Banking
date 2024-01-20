@@ -17,16 +17,38 @@ import {
 } from "@chakra-ui/react";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { useState } from "react";
+import axios from "axios";
 
 export const Ai = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSendMessage = () => {
-    if (input.trim() === "") return;
-    setMessages([...messages, { text: input, sender: "user" }]);
-    // Add logic to send input to AI and receive AI response
+  const handleSendMessage = async () => {
+    // Update messages with the user's input
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: input, sender: "user" },
+    ]);
+
+    try {
+      // Make a request to your backend API
+      const res = await axios.post(
+        "https://mobile-banking-backend.onrender.com/chat",
+        { input: input }
+      );
+
+      // Update messages with the response from the backend
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: res.data, sender: "Chatbot" },
+      ]);
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle error if necessary
+    }
+
+    // Clear the input field
     setInput("");
   };
 
@@ -67,7 +89,7 @@ export const Ai = () => {
                 overflowY="scroll"
                 bg="gray.100"
               >
-                {messages.map((message, index) => (
+                {messages?.map((message, index) => (
                   <Text
                     key={index}
                     color={message.sender === "user" ? "teal.500" : "gray.700"}
