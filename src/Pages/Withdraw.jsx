@@ -89,6 +89,7 @@ export const Withdraw = () => {
             <Input
               placeholder="Enter withdrawal amount"
               size="md"
+              type="number"
               value={withdrawalAmount}
               onChange={(e) => setWithdrawalAmount(e.target.value)}
               bg="gray.100"
@@ -105,7 +106,7 @@ export const Withdraw = () => {
             <Input
               placeholder="Enter Your Pin"
               size="md"
-              type="password"
+              type="number"
               maxLength="4"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}

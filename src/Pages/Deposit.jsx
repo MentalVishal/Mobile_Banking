@@ -132,7 +132,7 @@ export const Deposit = () => {
             <Input
               placeholder="Enter your 4-digit PIN"
               size="lg"
-              type="password"
+              type="number"
               value={pin}
               onChange={(e) => {
                 setPin(e.target.value.slice(0, 4)); // Limit to 4 characters
