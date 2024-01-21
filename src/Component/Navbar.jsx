@@ -126,7 +126,7 @@ export const Navbar = () => {
           <IconButton
             icon={<HamburgerIcon />}
             aria-label="Open menu"
-            color="white"
+            color="black"
             onClick={onOpen}
           />
           <Drawer
